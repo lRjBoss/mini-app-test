@@ -6,43 +6,93 @@
     <title>Step 2 - Get File</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; background-color: #1e1e1e; color: white; text-align: center; padding: 20px; }
-        .ad-space { background: #2c2c2c; padding: 20px; margin: 15px 0; border: 1px dashed #555; border-radius: 8px; }
-        .btn { background: #4CAF50; color: white; padding: 15px; width: 100%; border: none; border-radius: 8px; font-size: 16px; margin-top: 10px; cursor: pointer; }
+        body { 
+            font-family: sans-serif; 
+            background-color: #1e1e1e; 
+            color: white; 
+            text-align: center; 
+            padding: 20px; 
+        }
+        .ad-space { 
+            background: #2c2c2c; 
+            padding: 10px; 
+            margin: 15px auto; 
+            border: 1px dashed #555; 
+            border-radius: 8px;
+            width: fit-content;
+        }
+        .btn { 
+            background: #4CAF50; 
+            color: white; 
+            padding: 15px; 
+            width: 100%; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            margin-top: 20px; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
     <h2>🚀 Step 2: Final Step</h2>
     <p>Watch 1 quick sponsor ad to get your file.</p>
     
-    <!-- Yahan bhi ek A-Ads banner laga sakte ho -->
     <div class="ad-space">
-        [ A-Ads Banner 3 Here ]
+        <iframe data-aa='2445650' src='//ad.a-ads.com/2445650/?size=300x250' style='border:0; padding:0; width:300px; height:250px; overflow:hidden; margin: auto'></iframe>
     </div>
 
-    <!-- HilltopAds Direct Link Logic -->
     <button id="watchAdBtn" class="btn" onclick="triggerAd()">▶ Watch Ad & Unlock File</button>
 
     <div id="fileSection" style="display: none; margin-top: 20px;">
         <h3>✅ File Unlocked!</h3>
-        <p>Return to Bot to get your file.</p>
+        <p style="color: #4CAF50;">Redirecting to Google...</p>
     </div>
 
     <script>
         function triggerAd() {
-            // Yahan HilltopAds ka Direct Link lagana hai
             let hilltopAdsUrl = "https://pleased-report.com/l0ONjW";
-            
-            // Nayi tab mein Ad khulega
-            window.Telegram.WebApp.openLink(hilltopAdsUrl);
+            let btn = document.getElementById("watchAdBtn");
 
-            // Button ko hide karke File message show karna
-            document.getElementById("watchAdBtn").style.display = "none";
-            
+            // 1. Nayi link kholne ka code (Telegram ke andar smoothly khulega)
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
+                window.Telegram.WebApp.openLink(hilltopAdsUrl);
+            } else {
+                window.open(hilltopAdsUrl, '_blank');
+            }
+
+            // 2. Button ka text change kar do taaki user dobara click na kare
+            btn.innerText = "⏳ Please wait...";
+            btn.disabled = true;
+
+            // 3. 5 Second ka Wait Timer (User tab tak ad dekh raha hoga)
             setTimeout(() => {
+                // Button hata do aur success message dikhao
+                btn.style.display = "none";
                 document.getElementById("fileSection").style.display = "block";
-                window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-            }, 3000); 
+                
+                // Telegram mobile app mein vibration feel hogi
+                if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                    window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
+                }
+
+                // 4. Message dikhane ke 2 second baad automatically Google par bhej do!
+                setTimeout(() => {
+                    window.location.href = "https://www.google.com";
+                }, 2000);
+
+            }, 5000); // Total 5 second ka delay
+        }
+
+        // Mini App ko full screen karne ke liye
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
         }
     </script>
 </body>
