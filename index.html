@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 1 - Verification</title>
     
     <meta name="mnd-ver" content="862yyycugytws5wjvwohw" />
-    
-    <title>Step 1 - Verification</title>
+
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { font-family: sans-serif; background-color: #1e1e1e; color: white; text-align: center; padding: 20px; margin: 0; }
@@ -15,7 +15,7 @@
         .btn { background: #0088cc; color: white; padding: 15px; width: 90%; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 10px auto; display: block; }
         .btn:disabled { background: #555; cursor: not-allowed; }
         .btn.success { background: #4CAF50; }
-        .spacer { height: 60vh; } 
+        .spacer { height: 60vh; }
     </style>
 </head>
 <body>
@@ -54,7 +54,7 @@
             let nBtn = document.getElementById("nextBtn");
             let timeLeft = 5;
             
-            vBtn.disabled = true; 
+            vBtn.disabled = true;
 
             let timerInterval = setInterval(function() {
                 vBtn.innerText = "⏳ Please wait " + timeLeft + "s...";
