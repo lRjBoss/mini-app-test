@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="mnd-ver" content="862yyycugytws5wjvwohw" />
+    
     <title>Step 1 - Verification</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -12,7 +15,7 @@
         .btn { background: #0088cc; color: white; padding: 15px; width: 90%; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 10px auto; display: block; }
         .btn:disabled { background: #555; cursor: not-allowed; }
         .btn.success { background: #4CAF50; }
-        .spacer { height: 60vh; } /* Page ko lamba karne ke liye khali space */
+        .spacer { height: 60vh; } 
     </style>
 </head>
 <body>
@@ -41,7 +44,6 @@
     <button id="nextBtn" class="btn" disabled onclick="window.location.href='final.html'" style="margin-bottom: 40px; opacity: 0.5;">Next Step ➔</button>
 
     <script>
-        // Mini App Setup
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand();
@@ -52,7 +54,7 @@
             let nBtn = document.getElementById("nextBtn");
             let timeLeft = 5;
             
-            vBtn.disabled = true; // Button lock kar do taaki dobara click na ho
+            vBtn.disabled = true; 
 
             let timerInterval = setInterval(function() {
                 vBtn.innerText = "⏳ Please wait " + timeLeft + "s...";
@@ -63,16 +65,13 @@
                     vBtn.innerText = "✅ Verified Successfully!";
                     vBtn.classList.add("success");
                     
-                    // Niche wala button on karo
                     nBtn.disabled = false;
                     nBtn.style.opacity = "1";
                     
-                    // Phone vibrate karo (Telegram API)
                     if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
                         window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
                     }
 
-                    // Automatically sabse niche scroll karo!
                     setTimeout(() => {
                         nBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }, 500);
