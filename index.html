@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 1 - Verification</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: sans-serif; background-color: #1e1e1e; color: white; text-align: center; padding: 20px; }
+        .ad-space { background: #2c2c2c; padding: 20px; margin: 15px 0; border: 1px dashed #555; border-radius: 8px; }
+        .btn { background: #0088cc; color: white; padding: 15px; width: 100%; border: none; border-radius: 8px; font-size: 16px; margin-top: 20px; cursor: pointer; }
+        .btn:disabled { background: #555; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <h2>🔒 Step 1: Verification</h2>
+    
+    <!-- Yahan A-Ads ka Iframe paste karna -->
+    <div class="ad-space">
+        [ A-Ads Banner 1 Here ]
+        <!-- Example: <iframe data-aa="xxxxx" src="//ad.a-ads.com/xxxxx?size=300x250" scrolling="no" style="width:300px; height:250px; border:0px; padding:0; overflow:hidden" allowtransparency="true"></iframe> -->
+    </div>
+
+    <p id="timerText">Checking security... Please wait <span id="time">5</span>s</p>
+
+    <button id="nextBtn" class="btn" disabled onclick="window.location.href='final.html'">Next Step ➔</button>
+
+    <!-- Yahan A-Ads ka Iframe paste karna -->
+    <div class="ad-space">
+        [ A-Ads Banner 2 Here ]
+    </div>
+
+    <script>
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+
+        let timeLeft = 5;
+        let timer = setInterval(function() {
+            timeLeft--;
+            document.getElementById("time").innerText = timeLeft;
+            if(timeLeft <= 0) {
+                clearInterval(timer);
+                document.getElementById("timerText").innerText = "✅ Verified successfully!";
+                document.getElementById("nextBtn").disabled = false;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
