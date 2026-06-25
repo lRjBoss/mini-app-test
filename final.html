@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 2 - Get File</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: sans-serif; background-color: #1e1e1e; color: white; text-align: center; padding: 20px; }
+        .ad-space { background: #2c2c2c; padding: 20px; margin: 15px 0; border: 1px dashed #555; border-radius: 8px; }
+        .btn { background: #4CAF50; color: white; padding: 15px; width: 100%; border: none; border-radius: 8px; font-size: 16px; margin-top: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>🚀 Step 2: Final Step</h2>
+    <p>Watch 1 quick sponsor ad to get your file.</p>
+    
+    <!-- Yahan bhi ek A-Ads banner laga sakte ho -->
+    <div class="ad-space">
+        [ A-Ads Banner 3 Here ]
+    </div>
+
+    <!-- HilltopAds Direct Link Logic -->
+    <button id="watchAdBtn" class="btn" onclick="triggerAd()">▶ Watch Ad & Unlock File</button>
+
+    <div id="fileSection" style="display: none; margin-top: 20px;">
+        <h3>✅ File Unlocked!</h3>
+        <p>Return to Bot to get your file.</p>
+    </div>
+
+    <script>
+        function triggerAd() {
+            // Yahan HilltopAds ka Direct Link paste karna hai
+            let hilltopAdsUrl = "https://GO_HILLTOPADS_LINK_HERE";
+            
+            // Nayi tab mein Ad khulega (Paisa banega!)
+            window.open(hilltopAdsUrl, '_blank');
+
+            // Button ko hide karke File message show karna
+            document.getElementById("watchAdBtn").style.display = "none";
+            
+            setTimeout(() => {
+                document.getElementById("fileSection").style.display = "block";
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
+            }, 3000); // 3 second baad success dikhayega
+        }
+    </script>
+</body>
+</html>
+
