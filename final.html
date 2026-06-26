@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Step 2 - Get File</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <script src="https://pl29903114.effectivecpmnetwork.com/6f/d9/c8/6fd9c84eff33e774e417f1fa027aae52.js"></script>
+
     <style>
         body { font-family: sans-serif; background-color: #1e1e1e; color: white; text-align: center; padding: 20px; margin: 0; }
         .header { font-size: 24px; font-weight: bold; margin-bottom: 10px; color: #4CAF50; }
-        .ad-space { background: #2c2c2c; padding: 10px; margin: 20px auto; border: 1px dashed #555; border-radius: 8px; width: 300px; height: 250px; overflow: hidden; }
+        .ad-space { background: #2c2c2c; padding: 10px; margin: 20px auto; border: 1px dashed #555; border-radius: 8px; width: 320px; min-height: 250px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .btn { background: #4CAF50; color: white; padding: 15px; width: 90%; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
         .btn:disabled { background: #555; cursor: not-allowed; }
     </style>
@@ -19,39 +22,40 @@
     <p style="color: #aaa; font-size: 15px;">Watch 1 quick sponsor ad to get your file.</p>
     
     <div class="ad-space">
-        <iframe data-aa='2445650' src='//ad.a-ads.com/2445650/?size=300x250' style='border:0; padding:0; width:300px; height:250px; overflow:hidden; margin: auto'></iframe>
+        <script>
+          atOptions = {
+            'key' : '78390246d6bef9e268e5f36b76428c74',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/78390246d6bef9e268e5f36b76428c74/invoke.js"></script>
     </div>
 
-    <button id="watchAdBtn" class="btn" onclick="triggerAd()">▶ Watch Ad & Unlock File</button>
+    <button id="watchAdBtn" class="btn" onclick="unlockFile()">▶ Watch Ad & Unlock File</button>
 
     <div id="fileSection" style="display: none; margin-top: 30px; background: #252525; padding: 20px; border-radius: 10px;">
         <h3 style="margin:0; color: #4CAF50;">✅ File Unlocked!</h3>
-        <p style="color: #aaa; margin-top: 10px;">Redirecting to Google...</p>
+        <p style="color: #aaa; margin-top: 10px;">Redirecting back to Bot...</p>
     </div>
 
     <script>
-        // Mini App Setup
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand();
         }
 
-        function triggerAd() {
-            let hilltopAdsUrl = "https://pleased-report.com/l0ONjW";
+        function unlockFile() {
             let btn = document.getElementById("watchAdBtn");
 
-            // Nayi link kholo (Ad Trigger)
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
-                window.Telegram.WebApp.openLink(hilltopAdsUrl);
-            } else {
-                window.open(hilltopAdsUrl, '_blank');
-            }
-
-            // Button update
+            // Adsterra ka Popunder script automatically click par trigger ho jayega
+            // Hum sirf UI update karenge
+            
             btn.innerText = "⏳ Unlocking...";
             btn.disabled = true;
 
-            // Wait Logic
             setTimeout(() => {
                 btn.style.display = "none";
                 document.getElementById("fileSection").style.display = "block";
@@ -60,7 +64,7 @@
                     window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
                 }
 
-                // Redirect to Google
+                // 2 second baad wapas google bhej do
                 setTimeout(() => {
                     window.location.href = "https://www.google.com";
                 }, 2000);
