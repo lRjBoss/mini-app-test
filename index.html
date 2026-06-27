@@ -130,16 +130,16 @@
 
         <h2>1. Predictive Auto-Scaling and Resource Management</h2>
         <p>One of the most significant advantages of modern AI cloud hosting is predictive auto-scaling. Legacy systems used to react to traffic spikes after they happened, often resulting in server crashes or slow loading times. Today, AI models analyze historical traffic patterns, social media trends, and even global news events to predict when your application will need more resources. The servers allocate CPU and RAM minutes before the traffic surge actually hits.</p>
-        
-        <p>This intelligent allocation not only ensures that your website remains blazing fast during peak hours but also saves massive amounts of money. You only pay for the exact computational power you use, precisely when you need it.</p>
 
-        <!-- NATIVE BANNER -->
+        <!-- FIRST NATIVE BANNER (Article ke beech mein) -->
         <div class="ad-container">
             <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
             <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
         </div>
 
-        <!-- TOP VERIFY BUTTON (Starts 8 sec timer) -->
+        <p>This intelligent allocation not only ensures that your website remains blazing fast during peak hours but also saves massive amounts of money. You only pay for the exact computational power you use, precisely when you need it.</p>
+
+        <!-- TOP VERIFY BUTTON (Double Click Trap Applied) -->
         <button id="verify-top-btn" class="action-btn">Step 1: Click to Verify</button>
         <div id="timer-top-text" class="timer-text">Please wait...</div>
 
@@ -175,12 +175,19 @@
             <h3 style="text-align: center; color: #1a252f;">Final Verification Step</h3>
             <p style="text-align: center;">You are almost there. Please complete the final step below to unlock your destination.</p>
             
-            <!-- BOTTOM VERIFY BUTTON (Starts 6 sec timer) -->
+            <!-- BOTTOM VERIFY BUTTON (Double Click Trap Applied) -->
             <button id="verify-bottom-btn" class="action-btn" style="background: #17a2b8;">Step 2: Verify Here</button>
             <div id="timer-bottom-text" class="timer-text">Please wait...</div>
 
             <!-- FINAL SECTION (Appears after bottom timer finishes) -->
             <div id="final-section">
+
+                <!-- SECOND NATIVE BANNER (Sabse niche jaisa tumne kaha) -->
+                <div class="ad-container">
+                    <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
+                    <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
+                </div>
+                
                 <!-- Link to Page 2 -->
                 <button onclick="window.location.href='page2.html'" class="action-btn" style="background: #28a745; box-shadow: 0 4px 10px rgba(40,167,69,0.3);">Continue to Next Page</button>
                 
@@ -202,14 +209,14 @@
 
     </div>
 
-    <!-- ADSTERRA POPUNDER SCRIPT (Triggers on ANY first click) -->
+    <!-- ADSTERRA POPUNDER SCRIPT (Triggers background tabs on clicks) -->
     <script src="https://pl29903114.effectivecpmnetwork.com/6f/d9/c8/6fd9c84eff33e774e417f1fa027aae52.js"></script>
 
     <script>
-        // --- 2-STEP TIMER LOGIC --- //
+        // --- STRICT DOUBLE CLICK TRAP & SLOW TIMER LOGIC --- //
 
-        let topClicked = false;
-        let bottomClicked = false;
+        let topClicks = 0;
+        let bottomClicks = 0;
 
         const verifyTopBtn = document.getElementById('verify-top-btn');
         const timerTopText = document.getElementById('timer-top-text');
@@ -220,12 +227,17 @@
         const finalSection = document.getElementById('final-section');
 
         // TOP BUTTON LOGIC
-        verifyTopBtn.addEventListener('click', function() {
-            if (!topClicked) {
-                topClicked = true;
-                verifyTopBtn.style.display = 'none'; // Hide button immediately
-                timerTopText.style.display = 'block'; // Show timer text
-                startTopTimer(8); // 8 Seconds
+        verifyTopBtn.addEventListener('click', function(e) {
+            if (topClicks === 0) {
+                // Click 1: Do nothing functionally. 
+                // The Adsterra script at the bottom of the page will automatically catch this click and open a popunder.
+                topClicks++;
+            } else if (topClicks === 1) {
+                // Click 2: Real Action Starts
+                verifyTopBtn.style.display = 'none'; 
+                timerTopText.style.display = 'block'; 
+                startTopTimer(8); 
+                topClicks++;
             }
         });
 
@@ -243,18 +255,22 @@
                     timerTopText.style.color = "#28a745";
                     timerTopText.style.backgroundColor = "#e8f5e9";
                     timerTopText.style.borderColor = "#c8e6c9";
-                    bottomSection.style.display = 'block'; // Reveal the bottom area manually
+                    bottomSection.style.display = 'block'; 
                 }
             }, 1300); // 1.3s Slow Timer Trick
         }
 
         // BOTTOM BUTTON LOGIC
-        verifyBottomBtn.addEventListener('click', function() {
-            if (!bottomClicked) {
-                bottomClicked = true;
-                verifyBottomBtn.style.display = 'none'; // Hide button immediately
-                timerBottomText.style.display = 'block'; // Show timer text
-                startBottomTimer(6); // 6 Seconds
+        verifyBottomBtn.addEventListener('click', function(e) {
+            if (bottomClicks === 0) {
+                // Click 1: Do nothing. (Popunder triggers)
+                bottomClicks++;
+            } else if (bottomClicks === 1) {
+                // Click 2: Real Action Starts
+                verifyBottomBtn.style.display = 'none'; 
+                timerBottomText.style.display = 'block'; 
+                startBottomTimer(6); 
+                bottomClicks++;
             }
         });
 
@@ -272,7 +288,7 @@
                     timerBottomText.style.color = "#28a745";
                     timerBottomText.style.backgroundColor = "#e8f5e9";
                     timerBottomText.style.borderColor = "#c8e6c9";
-                    finalSection.style.display = 'block'; // Reveal the final Continue button
+                    finalSection.style.display = 'block'; 
                 }
             }, 1300); // 1.3s Slow Timer Trick
         }
