@@ -3,74 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Step 2 - Get File</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <script src="https://pl29903114.effectivecpmnetwork.com/6f/d9/c8/6fd9c84eff33e774e417f1fa027aae52.js"></script>
-
+    <title>Your File is Ready - TechZon</title>
     <style>
-        body { font-family: sans-serif; background-color: #1e1e1e; color: white; text-align: center; padding: 20px; margin: 0; }
-        .header { font-size: 24px; font-weight: bold; margin-bottom: 10px; color: #4CAF50; }
-        .ad-space { background: #2c2c2c; padding: 10px; margin: 20px auto; border: 1px dashed #555; border-radius: 8px; width: 320px; min-height: 250px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        .btn { background: #4CAF50; color: white; padding: 15px; width: 90%; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
-        .btn:disabled { background: #555; cursor: not-allowed; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8; /* Soothing background */
+            color: #333;
+            text-align: center;
+        }
+        header {
+            background: #2980b9; 
+            color: #fff;
+            padding: 20px;
+            font-size: 26px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px 20px;
+            background: #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-radius: 12px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        /* --- AD PLACEMENT BOXES --- */
+        .ad-container {
+            margin: 25px auto;
+            padding: 10px;
+            background: #fdfdfd;
+            border: 1px dashed #bdc3c7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* --- ANIMATED CIRCLE TIMER --- */
+        .loader-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 40px auto;
+        }
+        /* The spinning ring */
+        .spinner {
+            width: 100%;
+            height: 100%;
+            border: 8px solid #ecf0f1;
+            border-top: 8px solid #2980b9;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            box-sizing: border-box;
+        }
+        /* The number inside */
+        .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-msg {
+            color: #2980b9;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* --- FINAL GET FILE BUTTON --- */
+        #final-btn-container {
+            display: none; /* Hidden until timer hits 0 */
+            margin: 40px 0;
+        }
+        .get-file-btn {
+            display: inline-block;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 8px 15px rgba(39, 174, 96, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        .get-file-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 20px rgba(39, 174, 96, 0.4);
+        }
     </style>
 </head>
 <body>
-    
-    <div class="header">🚀 Step 2: Final Step</div>
-    <p style="color: #aaa; font-size: 15px;">Watch 1 quick sponsor ad to get your file.</p>
-    
-    <div class="ad-space">
-        <script>
-          atOptions = {
-            'key' : '78390246d6bef9e268e5f36b76428c74',
-            'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
-            'params' : {}
-          };
-        </script>
-        <script src="https://www.highperformanceformat.com/78390246d6bef9e268e5f36b76428c74/invoke.js"></script>
+
+    <header>TechZon Secure Cloud</header>
+
+    <div class="container">
+        
+        <h1>Your Link is Almost Ready!</h1>
+        <p class="subtitle">Our servers are generating a secure 🔐 link for you.</p>
+
+        <!-- NATIVE BANNER 1 (TOP) -->
+        <div class="ad-container">
+            <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
+            <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
+        </div>
+
+        <!-- ANIMATED CIRCLE & TIMER -->
+        <div id="timer-section">
+            <div class="loader-wrapper">
+                <div class="spinner"></div>
+                <div class="timer-text" id="countdown">5</div>
+            </div>
+            <div class="loading-msg">Generating URL 🔗</div>
+        </div>
+
+        <!-- FINAL BUTTON (Appears after timer) -->
+        <div id="final-btn-container">
+            <!-- Replace YOUR_FINAL_DESTINATION_LINK with the actual file link -->
+            <a href="https://one2all.video.blog/testing/" class="get-file-btn">🎯 Get Now</a>
+        </div>
+
+        <!-- NORMAL BANNER (MIDDLE) -->
+        <div class="ad-container">
+            <script>
+              atOptions = {
+                'key' : '78390246d6bef9e268e5f36b76428c74',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script src="https://www.highperformanceformat.com/78390246d6bef9e268e5f36b76428c74/invoke.js"></script>
+        </div>
+
+        <!-- NATIVE BANNER 2 (BOTTOM) -->
+        <div class="ad-container">
+            <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
+            <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
+        </div>
+
     </div>
 
-    <button id="watchAdBtn" class="btn" onclick="unlockFile()">▶ Watch Ad & Unlock File</button>
-
-    <div id="fileSection" style="display: none; margin-top: 30px; background: #252525; padding: 20px; border-radius: 10px;">
-        <h3 style="margin:0; color: #4CAF50;">✅ File Unlocked!</h3>
-        <p style="color: #aaa; margin-top: 10px;">Redirecting back to Bot...</p>
-    </div>
+    <!-- ADSTERRA SOCIAL BAR SCRIPT (Will show floating notifications automatically) -->
+    <script src="https://pl29903117.effectivecpmnetwork.com/dc/6d/23/dc6d23d6bce04a6565b8d772687dc70b.js"></script>
 
     <script>
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
-        }
+        // --- AUTO-START SLOW TIMER LOGIC (1 sec = 1.2 sec) --- //
+        
+        // This ensures the timer only starts when the entire page (including ads) has loaded
+        window.onload = function() {
+            let timeLeft = 5;
+            const countdownEl = document.getElementById('countdown');
+            const timerSection = document.getElementById('timer-section');
+            const finalBtnContainer = document.getElementById('final-btn-container');
 
-        function unlockFile() {
-            let btn = document.getElementById("watchAdBtn");
-
-            // Adsterra ka Popunder script automatically click par trigger ho jayega
-            // Hum sirf UI update karenge
-            
-            btn.innerText = "⏳ Unlocking...";
-            btn.disabled = true;
-
-            setTimeout(() => {
-                btn.style.display = "none";
-                document.getElementById("fileSection").style.display = "block";
+            const interval = setInterval(() => {
+                timeLeft--;
                 
-                if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-                    window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
+                if (timeLeft > 0) {
+                    countdownEl.innerText = timeLeft;
+                } else if (timeLeft === 0) {
+                    countdownEl.innerText = "0";
+                } else {
+                    // Stop timer and switch UI
+                    clearInterval(interval);
+                    timerSection.style.display = 'none'; // Hide the spinning circle
+                    finalBtnContainer.style.display = 'block'; // Show the final button
                 }
-
-                // 2 second baad wapas google bhej do
-                setTimeout(() => {
-                    window.location.href = "https://www.google.com";
-                }, 2000);
-
-            }, 5000); // 5 second timer
-        }
+            }, 1200); // 1200ms = 1.2 seconds per tick
+        };
     </script>
 </body>
 </html>
