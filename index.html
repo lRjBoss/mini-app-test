@@ -3,10 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- MONETAG VERIFICATION TAG YAHAN ADD KIYA HAI -->
-    <meta name="monetag" content="0b9e93a79372b3d0c71064a6506ffa5f">
-    
     <title>Top AI Cloud Tools 2026 - TechZon</title>
     <style>
         body {
@@ -186,7 +182,7 @@
             <!-- FINAL SECTION (Appears after bottom timer finishes) -->
             <div id="final-section">
 
-                <!-- SECOND NATIVE BANNER (Sabse niche) -->
+                <!-- SECOND NATIVE BANNER (Sabse niche jaisa tumne kaha) -->
                 <div class="ad-container">
                     <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
                     <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
@@ -233,8 +229,11 @@
         // TOP BUTTON LOGIC
         verifyTopBtn.addEventListener('click', function(e) {
             if (topClicks === 0) {
+                // Click 1: Do nothing functionally. 
+                // The Adsterra script at the bottom of the page will automatically catch this click and open a popunder.
                 topClicks++;
             } else if (topClicks === 1) {
+                // Click 2: Real Action Starts
                 verifyTopBtn.style.display = 'none'; 
                 timerTopText.style.display = 'block'; 
                 startTopTimer(8); 
@@ -258,14 +257,16 @@
                     timerTopText.style.borderColor = "#c8e6c9";
                     bottomSection.style.display = 'block'; 
                 }
-            }, 1300);
+            }, 1300); // 1.3s Slow Timer Trick
         }
 
         // BOTTOM BUTTON LOGIC
         verifyBottomBtn.addEventListener('click', function(e) {
             if (bottomClicks === 0) {
+                // Click 1: Do nothing. (Popunder triggers)
                 bottomClicks++;
             } else if (bottomClicks === 1) {
+                // Click 2: Real Action Starts
                 verifyBottomBtn.style.display = 'none'; 
                 timerBottomText.style.display = 'block'; 
                 startBottomTimer(6); 
@@ -289,7 +290,7 @@
                     timerBottomText.style.borderColor = "#c8e6c9";
                     finalSection.style.display = 'block'; 
                 }
-            }, 1300);
+            }, 1300); // 1.3s Slow Timer Trick
         }
     </script>
 </body>
