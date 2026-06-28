@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your File is Ready - TechZon</title>
-    
-    <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
+    <title>Your File is Ready - TechZon</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f0f4f8;
+            background-color: #f0f4f8; /* Soothing background */
             color: #333;
             text-align: center;
         }
@@ -103,7 +100,7 @@
 
         /* --- FINAL GET FILE BUTTON --- */
         #final-btn-container {
-            display: none;
+            display: none; /* Hidden until timer hits 0 */
             margin: 40px 0;
         }
         .get-file-btn {
@@ -152,7 +149,8 @@
 
         <!-- FINAL BUTTON (Appears after timer) -->
         <div id="final-btn-container">
-            <button class="get-file-btn" id="get-file-btn">🎯 Get File</button>
+            <!-- Replace YOUR_FINAL_DESTINATION_LINK with the actual file link -->
+            <button onclick="sendToBot()" class="get-file-btn" style="border: none;">🎯 Get File Now</button>
         </div>
 
         <!-- NORMAL BANNER (MIDDLE) -->
@@ -181,50 +179,39 @@
     <script src="https://pl29903117.effectivecpmnetwork.com/dc/6d/23/dc6d23d6bce04a6565b8d772687dc70b.js"></script>
 
     <script>
-        // ============================================
-        // FINAL PAGE - IST DATE CALCULATION + VERIFICATION
-        // ============================================
+        // --- DYNAMIC MATH VERIFICATION & SEND BOT DATA --- //
+        const tg = window.Telegram.WebApp;
 
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
-
-        // Read token from sessionStorage
-        let startParam = sessionStorage.getItem('fullToken') || "";
-
-        console.log("Final Page - Full Token:", startParam);
-
-        // Parse token: {RandomNumber}_{SecretCode}_{TrapFlag}
-        // Example: 82_k9Mw2_X or 156_aB3dE_A
-        let tokenParts = startParam.split('_');
-        let randomNumber = 0;
-        let secretCode = "";
-
-        if (tokenParts.length >= 2) {
-            randomNumber = parseInt(tokenParts[0]);
-            // SecretCode is always the second part (5 characters)
-            secretCode = tokenParts[1];
-        }
-
-        console.log("Random Number:", randomNumber);
-        console.log("Secret Code:", secretCode);
-
-        // Get IST Date (1-31)
+        // India (IST) ka din (1-31) nikalne ka function
         function getISTDate() {
-            const now = new Date();
-            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const istTime = new Date(utcTime + (3600000 * 5.5)); // IST = UTC+5:30
-            return istTime.getDate(); // Returns 1-31
+            let d = new Date();
+            let utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+            let istDate = new Date(utc + (3600000 * 5.5)); // +5:30 for India
+            return istDate.getDate(); 
         }
 
-        // Calculate payload
-        let istDate = getISTDate();
-        let multipliedNumber = randomNumber * istDate;
-        let payload = multipliedNumber + "_" + secretCode;
-
-        console.log("IST Date:", istDate);
-        console.log("Multiplied Number:", multipliedNumber);
-        console.log("Final Payload:", payload);
+        function sendToBot() {
+            let rawToken = sessionStorage.getItem('user_token');
+            
+            if (rawToken && rawToken !== '00_dummy_X') {
+                let parts = rawToken.split('_'); // Example: ['82', 'k9Mw2', 'C']
+                
+                if (parts.length >= 2) {
+                    let num = parseInt(parts[0]);      // 82
+                    let secretStr = parts[1];          // k9Mw2
+                    let todayDate = getISTDate();      // (e.g. 28)
+                    
+                    let mathResult = num * todayDate;  // 82 * 28 = 2296
+                    let finalPayload = mathResult + "_" + secretStr; // "2296_k9Mw2"
+                    
+                    // Bot ko data bhejo aur Mini App close karo
+                    tg.sendData(finalPayload);
+                    tg.close();
+                    return;
+                }
+            }
+            alert("Session Invalid! Kripya bot se naya link lein.");
+        }
 
         // --- AUTO-START SLOW TIMER LOGIC (1 sec = 1.2 sec) --- //
         
@@ -250,31 +237,6 @@
                 }
             }, 1200); // 1200ms = 1.2 seconds per tick
         };
-
-        // Get File Button Click Handler
-        document.addEventListener('DOMContentLoaded', function() {
-            const finalBtn = document.getElementById('get-file-btn');
-            
-            if (finalBtn) {
-                finalBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    console.log("Sending payload to bot:", payload);
-                    
-                    // Send data to bot
-                    tg.sendData(payload);
-                    
-                    // Show confirmation
-                    finalBtn.innerText = "✅ Sent! Closing...";
-                    finalBtn.style.background = "#27ae60";
-                    
-                    // Close WebApp after 1 second
-                    setTimeout(() => {
-                        tg.close();
-                    }, 1000);
-                });
-            }
-        });
     </script>
 </body>
 </html>
