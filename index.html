@@ -1,58 +1,9 @@
-Tum mujhse normali hinglish main baat kar sakte ho theek hai aur mujhe yah sab karvana Hai tumse dekh lo 
-
-
-Context & Goal:
-I am building an advanced Telegram Bot paired with a Telegram Mini App (hosted on GitHub Pages) for secure file delivery and highly optimized Adsterra monetization. I need you to write the complete backend (Python Bot) and provide the exact JavaScript logic to integrate into my existing frontend HTML files. I will run this on a VPS.
-​1. Tech Stack:
-​Backend: Python 3 using aiogram (v3.x) or python-telegram-bot (v20+). (Requires ONLY Bot Token, no API ID/Hash).
-​Database: SQLite (for storing token, user ID, target message data, and generation timestamp).
-​Frontend: Vanilla JavaScript inside static HTML (Telegram WebApp API).
-​2. Adsterra Ad Codes Provided:
-​Native Banner: 2e4f2de37171ed2a68c344b39b3ece77
-​300x250 Banner: 78390246d6bef9e268e5f36b76428c74
-​468x60 Banner: ebf0880bc7172cef87daa965b02a621c
-​160x300 Banner: 3862c48a17a2f7820b71b103aaac6939
-​Popunder JS: 6fd9c84eff33e774e417f1fa027aae52.js
-​Social Bar JS: dc6d23d6bce04a6565b8d772687dc70b.js
-​3. Backend (Python Bot) Logic:
-​Command /gen: When I send /gen, the bot should enter a state waiting for the next message. I can send anything (Text, Video, Document, Audio, Photo, Sticker).
-​Token Generation: The bot saves the message (using file_id or text content) in SQLite and generates a 3-part token: {RandomNumber}_{SecretCode}_{TrapFlag}.
-​RandomNumber: A random integer (e.g., 82).
-​SecretCode: A random 5-character alphanumeric string (e.g., k9Mw2).
-​TrapFlag: Based on a 5% probability check (5 out of 100). If hit, randomly assign _A, _B, _C, or _D. Otherwise (95% chance), assign _X.
-​URL Delivery: The bot replies with an Inline Keyboard Button pointing to the Mini App:
-https://t.me/testing10283_bot/Demo?startapp={RandomNumber}_{SecretCode}_{TrapFlag}
-​Verification Receiver: The bot must listen for data sent back via Telegram.WebApp.sendData().
-​The incoming payload will look like: {MultipliedNumber}_{SecretCode}.
-​The bot searches the database for SecretCode. If found, it retrieves the original RandomNumber.
-​The bot multiplies the original RandomNumber by the current Date (Day of the month in IST, 1-31). To handle midnight edge cases, it should check both current_date and current_date - 1.
-​If the math matches the MultipliedNumber, validation is successful! The bot sends the originally saved media/text to the user and deletes the token from SQLite to prevent reuse.
-​4. Frontend (JavaScript) Logic:
-​I will provide my 3 HTML files (index.html, page2.html, final.html). You need to write the specific JS code to inject into them.
-​Initialization: On page load, read the startapp token using window.Telegram.WebApp.initDataUnsafe.start_param.
-​The Trap (Forced Ad Click): Parse the last two characters (TrapFlag).
-​_A: Show a full-screen forced click overlay with the Native Banner on Page 1.
-​_B: Show a full-screen forced click overlay with the 300x250 Banner on Page 1.
-​_C: Show a full-screen forced click overlay with the Native Banner on Page 2.
-​_D: Show a full-screen forced click overlay with the 300x250 Banner on Page 2.
-​_X: Do nothing (normal flow).
-​Note on Trap: The overlay must force the user to click the ad. Once they return (detected via window focus/blur events), hide the overlay and reveal the actual page content.
-​Dynamic Client-Side Hashing (On final.html): * Extract the {RandomNumber} and {SecretCode}.
-​Get the current Day of the Month (1-31) in India Standard Time (IST).
-​Calculate: Payload = (RandomNumber * IST_Date) + "_" + SecretCode.
-​When the user clicks the "Get File" button, execute Telegram.WebApp.sendData(Payload) and close the Mini App using Telegram.WebApp.close().
-​Please provide the complete Python bot code (modular and production-ready for VPS) and the exact JavaScript snippets I need to paste into my frontend files. Ensure the logic is flawless and highly secure.
-
-
-Yah Lo code yah tumhari help Karega 
-
-index.html
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <title>Top AI Cloud Tools 2026 - TechZon</title>
     <style>
         body {
@@ -155,6 +106,14 @@ index.html
     </style>
 </head>
 <body>
+
+    <div id="ad-trap-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+        <h3 style="color: #d13b3b; margin-bottom: 20px;">Please click the ad below to Verify & Continue 👇</h3>
+        
+        <div id="trap-ad-space">
+            [TRAP BANNER AD CODE HERE]
+        </div>
+    </div>
 
     <header>TechZon Intelligence</header>
 
@@ -263,6 +222,40 @@ index.html
     <script src="https://pl29903114.effectivecpmnetwork.com/6f/d9/c8/6fd9c84eff33e774e417f1fa027aae52.js"></script>
 
     <script>
+        // --- TELEGRAM TOKEN & TRAP LOGIC --- //
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Screen full size karne ke liye
+
+        // Token URL se nikal kar save karna (e.g., 82_k9Mw2_C)
+        let rawToken = tg.initDataUnsafe?.start_param || sessionStorage.getItem('user_token') || '00_dummy_X';
+        sessionStorage.setItem('user_token', rawToken);
+
+        let secretCode = rawToken.slice(-2); // Aakhiri 2 akshar nikalega (_A, _B, etc.)
+
+        // Agar code _A ya _B hai, toh trap on karo
+        if (secretCode === '_A' || secretCode === '_B') {
+            const trapOverlay = document.getElementById('ad-trap-overlay');
+            trapOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Scroll band karne ke liye
+
+            // Iframe click detect karne ka Ninja Trick (Focus Blur)
+            let isClickingAd = false;
+            window.addEventListener('blur', function() {
+                if(document.activeElement.tagName === 'IFRAME') {
+                    isClickingAd = true;
+                }
+            });
+            
+            window.addEventListener('focus', function() {
+                if(isClickingAd) {
+                    // User ad click karke wapas aaya hai, trap hata do!
+                    trapOverlay.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    isClickingAd = false;
+                }
+            });
+        }
+
         // --- STRICT DOUBLE CLICK TRAP & SLOW TIMER LOGIC --- //
 
         let topClicks = 0;
@@ -345,513 +338,3 @@ index.html
     </script>
 </body>
 </html>
-
-page2.html
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5 Emerging Technologies in 2026 - TechZon</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.8;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f6f9;
-            color: #333;
-        }
-        header {
-            background: #8e44ad; /* Changed color to give Page 2 a different feel */
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            font-size: 26px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .container {
-            max-width: 850px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
-            border-radius: 8px;
-        }
-        h1 {
-            color: #2c3e50;
-            font-size: 28px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        h2 {
-            color: #8e44ad;
-            font-size: 22px;
-            margin-top: 30px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 5px;
-        }
-        p {
-            font-size: 17px;
-            color: #444;
-            margin-bottom: 20px;
-            text-align: justify;
-        }
-        /* Ad Placement Boxes */
-        .ad-container {
-            text-align: center;
-            margin: 40px auto;
-            padding: 10px;
-            background: #fdfdfd;
-            border: 1px dashed #ccc;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-        /* Action Buttons */
-        .action-btn {
-            display: block;
-            width: 100%;
-            max-width: 320px;
-            margin: 40px auto;
-            padding: 16px;
-            background: #8e44ad;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3);
-            transition: transform 0.2s, background 0.3s;
-        }
-        .action-btn:hover {
-            background: #732d91;
-            transform: scale(1.02);
-        }
-        .timer-text {
-            display: none;
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-            color: #e74c3c;
-            margin: 30px 0;
-            padding: 15px;
-            background: #fdf2f2;
-            border-radius: 8px;
-            border: 1px solid #fadbd8;
-        }
-        #bottom-section, #final-section {
-            display: none; 
-            padding: 40px 0;
-            margin-top: 20px;
-            border-top: 3px dashed #ddd;
-        }
-    </style>
-</head>
-<body>
-
-    <header>TechZon Innovations</header>
-
-    <div class="container">
-        
-        <h1>5 Emerging Technologies Shaping the World in 2026</h1>
-        
-        <p>Welcome back to TechZon. As we dive deeper into the technological marvels of 2026, it becomes clear that science fiction is rapidly becoming science fact. From quantum supremacy to personalized robotics, the tools we use daily have evolved at an unprecedented rate, fundamentally altering how we live, work, and communicate.</p>
-
-        <!-- TOP BANNER (300x250) -->
-        <div class="ad-container">
-            <script>
-              atOptions = {
-                'key' : '78390246d6bef9e268e5f36b76428c74',
-                'format' : 'iframe',
-                'height' : 250,
-                'width' : 300,
-                'params' : {}
-              };
-            </script>
-            <script src="https://www.highperformanceformat.com/78390246d6bef9e268e5f36b76428c74/invoke.js"></script>
-        </div>
-
-        <h2>1. The Era of Quantum Computing</h2>
-        <p>Quantum computing is no longer restricted to laboratory experiments. Commercial quantum processors are now being used to solve complex logistical problems and simulate molecular structures for life-saving drugs. Unlike classical computers that process bits in 0s and 1s, quantum bits (qubits) can exist in multiple states simultaneously, offering computational power that was previously unimaginable.</p>
-
-        <!-- FIRST NATIVE BANNER (Article ke beech mein) -->
-        <div class="ad-container">
-            <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
-            <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
-        </div>
-
-        <p>Major tech giants have already integrated quantum cloud services, allowing smaller developers to tap into this immense power. This leap has also forced a complete rewrite of global cybersecurity protocols, leading to the rise of quantum-resistant encryption.</p>
-
-        <!-- TOP VERIFY BUTTON (Double Click Trap Applied) -->
-        <button id="verify-top-btn" class="action-btn">Step 2: Click here</button>
-        <div id="timer-top-text" class="timer-text">Please wait...</div>
-
-        <h2>2. Augmented Reality (AR) Smart Glasses</h2>
-        <p>The clunky VR headsets of the early 2020s have been replaced by sleek, everyday Augmented Reality glasses. These devices project high-definition holographic interfaces directly onto the user's retina. Whether you are navigating city streets, translating foreign languages in real-time, or attending a virtual meeting, AR has seamlessly blended the digital and physical worlds.</p>
-
-        <p>Furthermore, developers are building immersive 3D applications that run entirely on mobile edge computing networks, eliminating the need for heavy local processing hardware on the glasses themselves.</p>
-
-        <!-- MIDDLE BANNER (468x60) -->
-        <div class="ad-container">
-            <script>
-              atOptions = {
-                'key' : 'ebf0880bc7172cef87daa965b02a621c',
-                'format' : 'iframe',
-                'height' : 60,
-                'width' : 468,
-                'params' : {}
-              };
-            </script>
-            <script src="https://www.highperformanceformat.com/ebf0880bc7172cef87daa965b02a621c/invoke.js"></script>
-        </div>
-
-        <h2>3. Next-Gen Automation & Swarm Robotics</h2>
-        <p>Robotics in 2026 has shifted from large, single-purpose machines to modular "swarm" systems. Inspired by nature, thousands of micro-robots can now communicate with each other to perform complex tasks, from constructing structures in hazardous environments to precision agriculture.</p>
-
-        <h2>Conclusion</h2>
-        <p>Staying updated with these technological trends is crucial for both personal and professional growth. The future belongs to those who adapt to and build upon these incredible new platforms.</p>
-
-        <!-- BOTTOM SECTION (Appears only after top timer finishes) -->
-        <div id="bottom-section">
-            <h3 style="text-align: center; color: #8e44ad;">Final Security Check</h3>
-            <p style="text-align: center;">You have successfully reached the final step. Verify below to unlock your destination link.</p>
-            
-            <!-- BOTTOM VERIFY BUTTON (Double Click Trap Applied) -->
-            <button id="verify-bottom-btn" class="action-btn" style="background: #e67e22;">Continue</button>
-            <div id="timer-bottom-text" class="timer-text">Please wait...</div>
-
-            <!-- FINAL SECTION (Appears after bottom timer finishes) -->
-            <div id="final-section">
-
-                <!-- SECOND NATIVE BANNER (Sabse niche) -->
-                <div class="ad-container">
-                    <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
-                    <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
-                </div>
-                
-                <!-- THE REAL FINAL DESTINATION LINK -->
-                <!-- Replace 'YOUR_FINAL_LINK_HERE' with your bot link or actual file URL -->
-                <button onclick="window.location.href='final.html'" class="action-btn" style="background: #27ae60; box-shadow: 0 4px 10px rgba(40,167,69,0.3);">Next page</button>
-                
-                <!-- BOTTOM BANNER (160x300) -->
-                <div class="ad-container">
-                    <script>
-                      atOptions = {
-                        'key' : '3862c48a17a2f7820b71b103aaac6939',
-                        'format' : 'iframe',
-                        'height' : 300,
-                        'width' : 160,
-                        'params' : {}
-                      };
-                    </script>
-                    <script src="https://www.highperformanceformat.com/3862c48a17a2f7820b71b103aaac6939/invoke.js"></script>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ADSTERRA POPUNDER SCRIPT (Triggers background tabs on clicks) -->
-    <script src="https://pl29903114.effectivecpmnetwork.com/6f/d9/c8/6fd9c84eff33e774e417f1fa027aae52.js"></script>
-
-    <script>
-        // --- STRICT DOUBLE CLICK TRAP & SLOW TIMER LOGIC --- //
-
-        let topClicks = 0;
-        let bottomClicks = 0;
-
-        const verifyTopBtn = document.getElementById('verify-top-btn');
-        const timerTopText = document.getElementById('timer-top-text');
-        const bottomSection = document.getElementById('bottom-section');
-
-        const verifyBottomBtn = document.getElementById('verify-bottom-btn');
-        const timerBottomText = document.getElementById('timer-bottom-text');
-        const finalSection = document.getElementById('final-section');
-
-        // TOP BUTTON LOGIC
-        verifyTopBtn.addEventListener('click', function(e) {
-            if (topClicks === 0) {
-                // Click 1: Do nothing functionally. Popunder opens via Adsterra script.
-                topClicks++;
-            } else if (topClicks === 1) {
-                // Click 2: Timer starts
-                verifyTopBtn.style.display = 'none'; 
-                timerTopText.style.display = 'block'; 
-                startTopTimer(8); 
-                topClicks++;
-            }
-        });
-
-        function startTopTimer(displaySeconds) {
-            let timeLeft = displaySeconds;
-            timerTopText.innerHTML = "Please wait " + timeLeft + " seconds...";
-            
-            const interval = setInterval(() => {
-                timeLeft--;
-                if (timeLeft > 0) {
-                    timerTopText.innerHTML = "Please wait " + timeLeft + " seconds...";
-                } else {
-                    clearInterval(interval);
-                    timerTopText.innerHTML = "Scroll Down to Continue 👇";
-                    timerTopText.style.color = "#27ae60";
-                    timerTopText.style.backgroundColor = "#eafaf1";
-                    timerTopText.style.borderColor = "#a9dfbf";
-                    bottomSection.style.display = 'block'; 
-                }
-            }, 1300); // 1.3s Slow Timer
-        }
-
-        // BOTTOM BUTTON LOGIC
-        verifyBottomBtn.addEventListener('click', function(e) {
-            if (bottomClicks === 0) {
-                // Click 1: Do nothing functionally. Popunder opens via Adsterra script.
-                bottomClicks++;
-            } else if (bottomClicks === 1) {
-                // Click 2: Timer starts
-                verifyBottomBtn.style.display = 'none'; 
-                timerBottomText.style.display = 'block'; 
-                startBottomTimer(6); 
-                bottomClicks++;
-            }
-        });
-
-        function startBottomTimer(displaySeconds) {
-            let timeLeft = displaySeconds;
-            timerBottomText.innerHTML = "Please wait " + timeLeft + " seconds...";
-            
-            const interval = setInterval(() => {
-                timeLeft--;
-                if (timeLeft > 0) {
-                    timerBottomText.innerHTML = "Please wait " + timeLeft + " seconds...";
-                } else {
-                    clearInterval(interval);
-                    timerBottomText.innerHTML = "Click on ads ☝️👇";
-                    timerBottomText.style.color = "#27ae60";
-                    timerBottomText.style.backgroundColor = "#eafaf1";
-                    timerBottomText.style.borderColor = "#a9dfbf";
-                    finalSection.style.display = 'block'; 
-                }
-            }, 1300); // 1.3s Slow Timer
-        }
-    </script>
-</body>
-</html>
-
-final.html
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your File is Ready - TechZon</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f4f8; /* Soothing background */
-            color: #333;
-            text-align: center;
-        }
-        header {
-            background: #2980b9; 
-            color: #fff;
-            padding: 20px;
-            font-size: 26px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .container {
-            max-width: 700px;
-            margin: 30px auto;
-            padding: 30px 20px;
-            background: #fff;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            border-radius: 12px;
-        }
-        h1 {
-            color: #2c3e50;
-            font-size: 26px;
-            margin-bottom: 5px;
-        }
-        p.subtitle {
-            color: #7f8c8d;
-            font-size: 16px;
-            margin-bottom: 30px;
-        }
-        
-        /* --- AD PLACEMENT BOXES --- */
-        .ad-container {
-            margin: 25px auto;
-            padding: 10px;
-            background: #fdfdfd;
-            border: 1px dashed #bdc3c7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
-        /* --- ANIMATED CIRCLE TIMER --- */
-        .loader-wrapper {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 40px auto;
-        }
-        /* The spinning ring */
-        .spinner {
-            width: 100%;
-            height: 100%;
-            border: 8px solid #ecf0f1;
-            border-top: 8px solid #2980b9;
-            border-radius: 50%;
-            animation: spin 1.5s linear infinite;
-            box-sizing: border-box;
-        }
-        /* The number inside */
-        .timer-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 40px;
-            font-weight: bold;
-            color: #2980b9;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .loading-msg {
-            color: #2980b9;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 15px;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
-        /* --- FINAL GET FILE BUTTON --- */
-        #final-btn-container {
-            display: none; /* Hidden until timer hits 0 */
-            margin: 40px 0;
-        }
-        .get-file-btn {
-            display: inline-block;
-            padding: 18px 40px;
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 22px;
-            font-weight: bold;
-            box-shadow: 0 8px 15px rgba(39, 174, 96, 0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-        .get-file-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 20px rgba(39, 174, 96, 0.4);
-        }
-    </style>
-</head>
-<body>
-
-    <header>TechZon Secure Cloud</header>
-
-    <div class="container">
-        
-        <h1>Your Link is Almost Ready!</h1>
-        <p class="subtitle">Our servers are generating a secure 🔐 link for you.</p>
-
-        <!-- NATIVE BANNER 1 (TOP) -->
-        <div class="ad-container">
-            <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
-            <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
-        </div>
-
-        <!-- ANIMATED CIRCLE & TIMER -->
-        <div id="timer-section">
-            <div class="loader-wrapper">
-                <div class="spinner"></div>
-                <div class="timer-text" id="countdown">5</div>
-            </div>
-            <div class="loading-msg">Generating URL 🔗</div>
-        </div>
-
-        <!-- FINAL BUTTON (Appears after timer) -->
-        <div id="final-btn-container">
-            <!-- Replace YOUR_FINAL_DESTINATION_LINK with the actual file link -->
-            <a href="https://one2all.video.blog/testing/" class="get-file-btn">🎯 Get Now</a>
-        </div>
-
-        <!-- NORMAL BANNER (MIDDLE) -->
-        <div class="ad-container">
-            <script>
-              atOptions = {
-                'key' : '78390246d6bef9e268e5f36b76428c74',
-                'format' : 'iframe',
-                'height' : 250,
-                'width' : 300,
-                'params' : {}
-              };
-            </script>
-            <script src="https://www.highperformanceformat.com/78390246d6bef9e268e5f36b76428c74/invoke.js"></script>
-        </div>
-
-        <!-- NATIVE BANNER 2 (BOTTOM) -->
-        <div class="ad-container">
-            <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
-            <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
-        </div>
-
-    </div>
-
-    <!-- ADSTERRA SOCIAL BAR SCRIPT (Will show floating notifications automatically) -->
-    <script src="https://pl29903117.effectivecpmnetwork.com/dc/6d/23/dc6d23d6bce04a6565b8d772687dc70b.js"></script>
-
-    <script>
-        // --- AUTO-START SLOW TIMER LOGIC (1 sec = 1.2 sec) --- //
-        
-        // This ensures the timer only starts when the entire page (including ads) has loaded
-        window.onload = function() {
-            let timeLeft = 5;
-            const countdownEl = document.getElementById('countdown');
-            const timerSection = document.getElementById('timer-section');
-            const finalBtnContainer = document.getElementById('final-btn-container');
-
-            const interval = setInterval(() => {
-                timeLeft--;
-                
-                if (timeLeft > 0) {
-                    countdownEl.innerText = timeLeft;
-                } else if (timeLeft === 0) {
-                    countdownEl.innerText = "0";
-                } else {
-                    // Stop timer and switch UI
-                    clearInterval(interval);
-                    timerSection.style.display = 'none'; // Hide the spinning circle
-                    finalBtnContainer.style.display = 'block'; // Show the final button
-                }
-            }, 1200); // 1200ms = 1.2 seconds per tick
-        };
-    </script>
-</body>
-</html>
-
-To chalo start karte hai
