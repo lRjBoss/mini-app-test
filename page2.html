@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5 Emerging Technologies in 2026 - TechZon</title>
+    
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,7 +18,7 @@
             color: #333;
         }
         header {
-            background: #8e44ad; /* Changed color to give Page 2 a different feel */
+            background: #8e44ad;
             color: #fff;
             padding: 20px;
             text-align: center;
@@ -187,7 +191,6 @@
                 </div>
                 
                 <!-- THE REAL FINAL DESTINATION LINK -->
-                <!-- Replace 'YOUR_FINAL_LINK_HERE' with your bot link or actual file URL -->
                 <button onclick="window.location.href='final.html'" class="action-btn" style="background: #27ae60; box-shadow: 0 4px 10px rgba(40,167,69,0.3);">Next page</button>
                 
                 <!-- BOTTOM BANNER (160x300) -->
@@ -212,6 +215,96 @@
     <script src="https://pl29903114.effectivecpmnetwork.com/6f/d9/c8/6fd9c84eff33e774e417f1fa027aae52.js"></script>
 
     <script>
+        // ============================================
+        // TELEGRAM WEBAPP + TRAP LOGIC (PAGE2.HTML)
+        // ============================================
+
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // Read token from sessionStorage
+        let startParam = sessionStorage.getItem('fullToken') || "";
+        let trapFlag = "";
+
+        if (startParam.length > 2) {
+            trapFlag = startParam.slice(-2);
+        }
+
+        console.log("Page2 - Token:", startParam);
+        console.log("Page2 - Trap Flag:", trapFlag);
+
+        // TRAP LOGIC for PAGE2.HTML (_C or _D)
+        if (trapFlag === "_C") {
+            // Force Native Banner Click on Page 2
+            showForcedAdOverlay('native');
+        } else if (trapFlag === "_D") {
+            // Force 300x250 Banner Click on Page 2
+            showForcedAdOverlay('banner300x250');
+        }
+
+        function showForcedAdOverlay(adType) {
+            const overlay = document.createElement('div');
+            overlay.id = 'forced-ad-overlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.95);
+                z-index: 999999;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                font-family: Arial, sans-serif;
+            `;
+            
+            overlay.innerHTML = `
+                <h2 style="color: #fff; margin-bottom: 20px;">🔐 Final Security Check</h2>
+                <p style="color: #ddd; margin-bottom: 30px; font-size: 16px;">Please click on the ad below to proceed</p>
+                <div id="trap-ad-container" style="background: white; padding: 20px; border-radius: 10px; min-width: 320px;">
+                    ${adType === 'native' ? `
+                        <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"><\/script>
+                        <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
+                    ` : `
+                        <script>
+                          atOptions = {
+                            'key' : '78390246d6bef9e268e5f36b76428c74',
+                            'format' : 'iframe',
+                            'height' : 250,
+                            'width' : 300,
+                            'params' : {}
+                          };
+                        <\/script>
+                        <script src="https://www.highperformanceformat.com/78390246d6bef9e268e5f36b76428c74/invoke.js"><\/script>
+                    `}
+                </div>
+                <p id="return-msg" style="color: #4CAF50; margin-top: 20px; display: none; font-weight: bold;">✅ Verified! Redirecting...</p>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            let hasLeft = false;
+            
+            window.addEventListener('blur', function() {
+                hasLeft = true;
+                console.log("User left page (ad clicked)");
+            });
+            
+            window.addEventListener('focus', function() {
+                if (hasLeft) {
+                    console.log("User returned to page");
+                    document.getElementById('return-msg').style.display = 'block';
+                    setTimeout(() => {
+                        overlay.remove();
+                    }, 1500);
+                }
+            });
+        }
+
         // --- STRICT DOUBLE CLICK TRAP & SLOW TIMER LOGIC --- //
 
         let topClicks = 0;
