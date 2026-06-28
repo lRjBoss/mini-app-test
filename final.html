@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your File is Ready - TechZon</title>
+    
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f0f4f8; /* Soothing background */
+            background-color: #f0f4f8;
             color: #333;
             text-align: center;
         }
@@ -99,7 +103,7 @@
 
         /* --- FINAL GET FILE BUTTON --- */
         #final-btn-container {
-            display: none; /* Hidden until timer hits 0 */
+            display: none;
             margin: 40px 0;
         }
         .get-file-btn {
@@ -148,8 +152,7 @@
 
         <!-- FINAL BUTTON (Appears after timer) -->
         <div id="final-btn-container">
-            <!-- Replace YOUR_FINAL_DESTINATION_LINK with the actual file link -->
-            <a href="https://one2all.video.blog/testing/" class="get-file-btn">🎯 Get Now</a>
+            <button class="get-file-btn" id="get-file-btn">🎯 Get File</button>
         </div>
 
         <!-- NORMAL BANNER (MIDDLE) -->
@@ -178,6 +181,51 @@
     <script src="https://pl29903117.effectivecpmnetwork.com/dc/6d/23/dc6d23d6bce04a6565b8d772687dc70b.js"></script>
 
     <script>
+        // ============================================
+        // FINAL PAGE - IST DATE CALCULATION + VERIFICATION
+        // ============================================
+
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // Read token from sessionStorage
+        let startParam = sessionStorage.getItem('fullToken') || "";
+
+        console.log("Final Page - Full Token:", startParam);
+
+        // Parse token: {RandomNumber}_{SecretCode}_{TrapFlag}
+        // Example: 82_k9Mw2_X or 156_aB3dE_A
+        let tokenParts = startParam.split('_');
+        let randomNumber = 0;
+        let secretCode = "";
+
+        if (tokenParts.length >= 2) {
+            randomNumber = parseInt(tokenParts[0]);
+            // SecretCode is always the second part (5 characters)
+            secretCode = tokenParts[1];
+        }
+
+        console.log("Random Number:", randomNumber);
+        console.log("Secret Code:", secretCode);
+
+        // Get IST Date (1-31)
+        function getISTDate() {
+            const now = new Date();
+            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const istTime = new Date(utcTime + (3600000 * 5.5)); // IST = UTC+5:30
+            return istTime.getDate(); // Returns 1-31
+        }
+
+        // Calculate payload
+        let istDate = getISTDate();
+        let multipliedNumber = randomNumber * istDate;
+        let payload = multipliedNumber + "_" + secretCode;
+
+        console.log("IST Date:", istDate);
+        console.log("Multiplied Number:", multipliedNumber);
+        console.log("Final Payload:", payload);
+
         // --- AUTO-START SLOW TIMER LOGIC (1 sec = 1.2 sec) --- //
         
         // This ensures the timer only starts when the entire page (including ads) has loaded
@@ -202,6 +250,31 @@
                 }
             }, 1200); // 1200ms = 1.2 seconds per tick
         };
+
+        // Get File Button Click Handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const finalBtn = document.getElementById('get-file-btn');
+            
+            if (finalBtn) {
+                finalBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    console.log("Sending payload to bot:", payload);
+                    
+                    // Send data to bot
+                    tg.sendData(payload);
+                    
+                    // Show confirmation
+                    finalBtn.innerText = "✅ Sent! Closing...";
+                    finalBtn.style.background = "#27ae60";
+                    
+                    // Close WebApp after 1 second
+                    setTimeout(() => {
+                        tg.close();
+                    }, 1000);
+                });
+            }
+        });
     </script>
 </body>
 </html>
