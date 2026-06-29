@@ -266,6 +266,7 @@
         let rawToken = sessionStorage.getItem('user_token') || '00_dummy_X';
         let secretCode = rawToken.slice(-2); 
 
+         // Agar code _C ya _D hai, toh Page 2 par trap on karo
         if (secretCode === '_C' || secretCode === '_D') {
             const trapOverlay = document.getElementById('ad-trap-overlay');
             if (secretCode === '_C') { document.getElementById('trap-native-ad').style.display = 'block'; } 
@@ -275,17 +276,7 @@
             trapOverlay.style.left = '0';
             document.body.style.overflow = 'hidden';
 
-        // Agar code _C ya _D hai, toh Page 2 par trap on karo
-        if (secretCode === '_C' || secretCode === '_D') {
-            const trapOverlay = document.getElementById('ad-trap-overlay');
-            if (secretCode === '_C') { document.getElementById('trap-native-ad').style.display = 'block'; } 
-            else if (secretCode === '_D') { document.getElementById('trap-normal-ad').style.display = 'block'; }
-
-            trapOverlay.style.top = '0';
-            trapOverlay.style.left = '0';
-            document.body.style.overflow = 'hidden';
-
-            // NAYA UNIVERSAL TRACKING LOGIC
+            // UNIVERSAL TRACKING LOGIC
             const detector = document.getElementById('ad-click-detector');
 
             function registerClick() {
@@ -299,10 +290,15 @@
             // Jab user wapas aayega
             window.addEventListener('focus', function() {
                 if (sessionStorage.getItem('ad_clicked_page2') === 'true') {
-                    trapOverlay.style.top = '-9999px';
-                    trapOverlay.style.left = '-9999px';
-                    document.body.style.overflow = 'auto'; 
-                    sessionStorage.removeItem('ad_clicked_page2'); 
+                    
+                    // NAYA: 3 Second ka Hidden Timer (3000 ms)
+                    setTimeout(function() {
+                        trapOverlay.style.top = '-9999px';
+                        trapOverlay.style.left = '-9999px';
+                        document.body.style.overflow = 'auto'; 
+                        sessionStorage.removeItem('ad_clicked_page2'); 
+                    }, 3000);
+                    
                 }
             });
         }
