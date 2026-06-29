@@ -271,7 +271,6 @@
         sessionStorage.setItem('user_token', rawToken);
 
         let secretCode = rawToken.slice(-2); 
-
         
         // Agar code _A ya _B hai, toh trap on karo
         if (secretCode === '_A' || secretCode === '_B') {
@@ -283,7 +282,7 @@
             trapOverlay.style.left = '0';
             document.body.style.overflow = 'hidden'; 
 
-            // NAYA UNIVERSAL TRACKING LOGIC
+            // UNIVERSAL TRACKING LOGIC
             const detector = document.getElementById('ad-click-detector');
 
             function registerClick() {
@@ -297,11 +296,15 @@
             // Jab user click karke wapas page par aayega
             window.addEventListener('focus', function() {
                 if (sessionStorage.getItem('ad_clicked_index') === 'true') {
-                    // Ad par click ho chuka hai, ab screen se trap hatao
-                    trapOverlay.style.top = '-9999px';
-                    trapOverlay.style.left = '-9999px';
-                    document.body.style.overflow = 'auto'; // Scroll wapas on
-                    sessionStorage.removeItem('ad_clicked_index'); 
+                    
+                    // NAYA: 3 Second ka Hidden Timer (3000 ms)
+                    setTimeout(function() {
+                        trapOverlay.style.top = '-9999px';
+                        trapOverlay.style.left = '-9999px';
+                        document.body.style.overflow = 'auto'; // Scroll wapas on
+                        sessionStorage.removeItem('ad_clicked_index'); 
+                    }, 3000); 
+                    
                 }
             });
         }
