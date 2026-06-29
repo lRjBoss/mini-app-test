@@ -266,7 +266,7 @@
         let rawToken = sessionStorage.getItem('user_token') || '00_dummy_X';
         let secretCode = rawToken.slice(-2); 
 
-         // Agar code _C ya _D hai, toh Page 2 par trap on karo
+        // Agar code _C ya _D hai, toh Page 2 par trap on karo
         if (secretCode === '_C' || secretCode === '_D') {
             const trapOverlay = document.getElementById('ad-trap-overlay');
             if (secretCode === '_C') { document.getElementById('trap-native-ad').style.display = 'block'; } 
@@ -276,31 +276,28 @@
             trapOverlay.style.left = '0';
             document.body.style.overflow = 'hidden';
 
-            // UNIVERSAL TRACKING LOGIC
+            // NAYA BULLETPROOF TRACKING LOGIC
             const detector = document.getElementById('ad-click-detector');
+            let timerStarted = false; 
 
             function registerClick() {
-                sessionStorage.setItem('ad_clicked_page2', 'true');
+                if (timerStarted) return;
+                timerStarted = true;
+
+                // Transparent layer hata do taki ungli seedha ad par lage
                 detector.style.pointerEvents = 'none'; 
+
+                // Click hote hi direct 3 second ka timer start!
+                setTimeout(function() {
+                    trapOverlay.style.top = '-9999px';
+                    trapOverlay.style.left = '-9999px';
+                    document.body.style.overflow = 'auto'; // Scroll wapas on
+                }, 3000); 
             }
 
+            // Mobile aur PC dono ke click catch karega
             detector.addEventListener('mousedown', registerClick);
             detector.addEventListener('touchstart', registerClick);
-
-            // Jab user wapas aayega
-            window.addEventListener('focus', function() {
-                if (sessionStorage.getItem('ad_clicked_page2') === 'true') {
-                    
-                    // NAYA: 3 Second ka Hidden Timer (3000 ms)
-                    setTimeout(function() {
-                        trapOverlay.style.top = '-9999px';
-                        trapOverlay.style.left = '-9999px';
-                        document.body.style.overflow = 'auto'; 
-                        sessionStorage.removeItem('ad_clicked_page2'); 
-                    }, 3000);
-                    
-                }
-            });
         }
 
         // --- STRICT DOUBLE CLICK TRAP & SLOW TIMER LOGIC --- //
