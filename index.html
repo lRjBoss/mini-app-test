@@ -269,7 +269,7 @@
         sessionStorage.setItem('user_token', rawToken);
 
         let secretCode = rawToken.slice(-2); 
-        
+
         // --- DYNAMIC POPUNDER INJECTION (2nd Click Trap) --- //
         let isPopunderLoaded = false;
         
@@ -284,14 +284,12 @@
             }
         }
 
-        // Jaise hi user page par pehla click karega, yeh silently background me script load kar dega.
-        // { once: true } ka matlab hai yeh function sirf pehli baar chalega, uske baad nahi.
+        // Jab user page par pehla click karega, Popunder background me load ho jayega
         document.body.addEventListener('click', function() {
             loadPopunder();
         }, { once: true });
 
-
-        // Agar code _A ya _B hai, toh trap on karo
+        // --- INVISIBLE TRAP LOGIC --- //
         if (secretCode === '_A' || secretCode === '_B') {
             const trapOverlay = document.getElementById('ad-trap-overlay');
             if (secretCode === '_A') { document.getElementById('trap-native-ad').style.display = 'block'; } 
@@ -301,26 +299,22 @@
             trapOverlay.style.left = '0';
             document.body.style.overflow = 'hidden'; 
 
-            // NAYA BULLETPROOF TRACKING LOGIC
             const detector = document.getElementById('ad-click-detector');
-            let timerStarted = false; // Taki baar-baar timer trigger na ho
+            let timerStarted = false; 
 
             function registerClick() {
                 if (timerStarted) return; 
                 timerStarted = true;
 
-                // Transparent layer hata do taki ungli seedha ad par lage
                 detector.style.pointerEvents = 'none'; 
 
-                // Click hote hi direct 3 second ka timer start!
                 setTimeout(function() {
                     trapOverlay.style.top = '-9999px';
                     trapOverlay.style.left = '-9999px';
-                    document.body.style.overflow = 'auto'; // Scroll wapas on
+                    document.body.style.overflow = 'auto'; 
                 }, 3000); 
             }
 
-            // Mobile aur PC dono ke click catch karega
             detector.addEventListener('mousedown', registerClick);
             detector.addEventListener('touchstart', registerClick);
         }
@@ -389,9 +383,9 @@
                 } else {
                     clearInterval(interval);
                     timerBottomText.innerHTML = "Click on ads ☝️👇 & Try again";
-                    timerBottomText.style.color = "#d13b3b";
-                    timerBottomText.style.backgroundColor = "#fdf2f2";
-                    timerBottomText.style.borderColor = "#fadbd8";
+                    timerBottomText.style.color = "#d13b3b"; 
+                    timerBottomText.style.backgroundColor = "#fdf2f2"; 
+                    timerBottomText.style.borderColor = "#fadbd8"; 
                     finalSection.style.display = 'block'; 
                 }
             }, 1300); 
