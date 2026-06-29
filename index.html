@@ -108,24 +108,27 @@
     <div id="ad-trap-overlay" style="position: fixed; top: -9999px; left: -9999px; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column;">
         <h3 style="color: #d13b3b; margin-bottom: 20px; text-align: center;">Please click the ad below to Verify & Continue 👇</h3>
         
-        <div id="trap-native-ad" style="display: none; width: 100%; text-align: center;">
-            <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
-            <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
-        </div>
+        <div id="trap-ad-space" style="width: 100%; max-width: 320px; min-height: 250px; text-align: center;">
+            
+            <div id="trap-native-ad" style="display: none; width: 100%;">
+                <script async="async" data-cfasync="false" src="https://pl29903115.effectivecpmnetwork.com/2e4f2de37171ed2a68c344b39b3ece77/invoke.js"></script>
+                <div id="container-2e4f2de37171ed2a68c344b39b3ece77"></div>
+            </div>
 
-        <div id="trap-normal-ad" style="display: none; width: 100%; text-align: center;">
-            <script>
-              atOptions = {
-                'key' : '78390246d6bef9e268e5f36b76428c74',
-                'format' : 'iframe',
-                'height' : 250,
-                'width' : 300,
-                'params' : {}
-              };
-            </script>
-            <script src="https://www.highperformanceformat.com/78390246d6bef9e268e5f36b76428c74/invoke.js"></script>
-        </div>
-    </div>
+            <div id="trap-normal-ad" style="display: none; width: 100%;">
+                <script>
+                  atOptions = {
+                    'key' : '78390246d6bef9e268e5f36b76428c74',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                  };
+                </script>
+                <script src="https://www.highperformanceformat.com/78390246d6bef9e268e5f36b76428c74/invoke.js"></script>
+            </div>
+
+        </div> </div>
 
     <header>TechZon Intelligence</header>
 
@@ -267,25 +270,44 @@
 
         let secretCode = rawToken.slice(-2); 
 
+        
+        // Agar code _A ya _B hai, toh trap on karo
         if (secretCode === '_A' || secretCode === '_B') {
             const trapOverlay = document.getElementById('ad-trap-overlay');
             if (secretCode === '_A') { document.getElementById('trap-native-ad').style.display = 'block'; } 
             else if (secretCode === '_B') { document.getElementById('trap-normal-ad').style.display = 'block'; }
 
+            // Screen ke beech mein laao (Trap ON)
             trapOverlay.style.top = '0';
             trapOverlay.style.left = '0';
             document.body.style.overflow = 'hidden'; 
 
-            let isClickingAd = false;
-            window.addEventListener('blur', function() {
-                if(document.activeElement.tagName === 'IFRAME') { isClickingAd = true; }
+            let overIframe = false;
+
+            // 1. Check karo ki kya user ka mouse/touch ad ke upar hai
+            document.getElementById('trap-ad-space').addEventListener('mouseover', function() {
+                overIframe = true;
             });
+            document.getElementById('trap-ad-space').addEventListener('mouseout', function() {
+                overIframe = false;
+            });
+
+            // 2. Agar mouse ad par hai aur window blur hui, matlab click pakka hai!
+            window.addEventListener('blur', function() {
+                if (overIframe) {
+                    // Ek chota sa flag set kar dete hain session mein ki click ho gaya
+                    sessionStorage.setItem('ad_clicked_index', 'true');
+                }
+            });
+            
+            // 3. Jab user wapas back aayega (Window Focus hogi)
             window.addEventListener('focus', function() {
-                if(isClickingAd) {
+                if (sessionStorage.getItem('ad_clicked_index') === 'true') {
+                    // User click karke wapas aaya hai, Trap Hatao!
                     trapOverlay.style.top = '-9999px';
                     trapOverlay.style.left = '-9999px';
                     document.body.style.overflow = 'auto';
-                    isClickingAd = false;
+                    sessionStorage.removeItem('ad_clicked_index'); // Clean up
                 }
             });
         }
