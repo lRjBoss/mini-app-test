@@ -259,7 +259,7 @@
 
     <!-- ADSTERRA POPUNDER SCRIPT -->
     
-
+    
     <script>
         // --- TELEGRAM TOKEN RETRIEVAL & TRAP LOGIC --- //
         const tg = window.Telegram.WebApp;
@@ -273,21 +273,17 @@
             if (!isPopunderLoaded) {
                 let script = document.createElement('script');
                 script.type = 'text/javascript';
-                // Tera Adsterra ka Popunder link
                 script.src = 'https://pl29903114.effectivecpmnetwork.com/6f/d9/c8/6fd9c84eff33e774e417f1fa027aae52.js';
                 document.body.appendChild(script);
                 isPopunderLoaded = true;
             }
         }
 
-        // Jaise hi user page par pehla click karega, yeh silently background me script load kar dega.
-        // { once: true } ka matlab hai yeh function sirf pehli baar chalega, uske baad nahi.
         document.body.addEventListener('click', function() {
             loadPopunder();
         }, { once: true });
 
-
-        // Agar code _C ya _D hai, toh Page 2 par trap on karo
+        // --- INVISIBLE TRAP LOGIC --- //
         if (secretCode === '_C' || secretCode === '_D') {
             const trapOverlay = document.getElementById('ad-trap-overlay');
             if (secretCode === '_C') { document.getElementById('trap-native-ad').style.display = 'block'; } 
@@ -297,7 +293,6 @@
             trapOverlay.style.left = '0';
             document.body.style.overflow = 'hidden';
 
-            // NAYA BULLETPROOF TRACKING LOGIC
             const detector = document.getElementById('ad-click-detector');
             let timerStarted = false; 
 
@@ -305,18 +300,15 @@
                 if (timerStarted) return;
                 timerStarted = true;
 
-                // Transparent layer hata do taki ungli seedha ad par lage
                 detector.style.pointerEvents = 'none'; 
 
-                // Click hote hi direct 3 second ka timer start!
                 setTimeout(function() {
                     trapOverlay.style.top = '-9999px';
                     trapOverlay.style.left = '-9999px';
-                    document.body.style.overflow = 'auto'; // Scroll wapas on
+                    document.body.style.overflow = 'auto'; 
                 }, 3000); 
             }
 
-            // Mobile aur PC dono ke click catch karega
             detector.addEventListener('mousedown', registerClick);
             detector.addEventListener('touchstart', registerClick);
         }
