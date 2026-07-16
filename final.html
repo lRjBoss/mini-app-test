@@ -204,10 +204,20 @@
                     let mathResult = num * todayDate;  // 82 * 28 = 2296
                     let finalPayload = mathResult + "_" + secretStr; // "2296_k9Mw2"
                     
-                    // Bot ko data bhejo aur Mini App close karo
-                    tg.sendData(finalPayload);
+                                        // Final Redirect Link bano
+                    // Yahan hum Decode karenge `k9Mw2` -> Bot Username
+                    let decodedBotUsername = atob(secretStr); // Base64 decode
+
+                    // Clone Bot ka Full Link Banega: https://t.me/BotUsername?start=verify_2296
+                    let botLink = "https://t.me/" + decodedBotUsername + "?start=verify_" + mathResult;
+                    
+                    // User ko seedha wapas Bot ke chat par bhej do!
+                    tg.openTelegramLink(botLink);
+                    
+                    // WebApp ko background me close kar do
                     tg.close();
                     return;
+
                 }
             }
             alert("Session Invalid! Kripya bot se naya link lein.");
